@@ -24,7 +24,6 @@ function parserPackageJson(workspace)
 		local result = fp:read("*a")
 		local wtf = vim.json.decode(result);
 		output = wtf
-		for k,v in pairs(wtf) do print(k,v) end
 		fp:close()
 	end
   return output
@@ -37,6 +36,7 @@ function M.registerSnippet(root_dir, filetypes, lsp_name, global_snippets)
     for _, filetype in pairs(filetypes) do
       for _, v in pairs(global_snippets) do
         local out = M.nodeJsShouldAddSnippet(v, package_json)
+        print("out", out)
         if out ~= nil then
           if output[filetype] ~= nil then
             output[filetype] = {}
@@ -55,6 +55,7 @@ function M.nodeJsShouldAddSnippet(decoratedSnip, package_json, lsp_filetype)
   local depOrDevDep = decoratedSnip[3]
   local acceptedValue = decoratedSnip[4]
   local x = package_json[depOrDevDep][depName]
+  print(x, lsp_filetype, filetype)
   if x and filetype == lsp_filetype then
     if acceptedValue == "present" then
       return decoratedSnip[5]
