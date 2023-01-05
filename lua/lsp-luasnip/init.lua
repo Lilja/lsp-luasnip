@@ -31,14 +31,14 @@ end
 
 function M.registerSnippet(root_dir, filetypes, lsp_name, global_snippets)
   local output = {}
+  print(lsp_name)
   if lsp_name == "tsserver" or lsp_name == "volar" then
     local package_json = parserPackageJson(root_dir)
     for _, filetype in pairs(filetypes) do
       for _, v in pairs(global_snippets) do
-        local out = M.nodeJsShouldAddSnippet(v, package_json)
-        print("out", out)
+        local out = M.nodeJsShouldAddSnippet(v, package_json, filetype)
         if out ~= nil then
-          if output[filetype] ~= nil then
+          if output[filetype] == nil then
             output[filetype] = {}
           end
           table.insert(output[filetype], out)
@@ -55,7 +55,6 @@ function M.nodeJsShouldAddSnippet(decoratedSnip, package_json, lsp_filetype)
   local depOrDevDep = decoratedSnip[3]
   local acceptedValue = decoratedSnip[4]
   local x = package_json[depOrDevDep][depName]
-  print(x, lsp_filetype, filetype)
   if x and filetype == lsp_filetype then
     if acceptedValue == "present" then
       return decoratedSnip[5]
