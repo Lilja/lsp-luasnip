@@ -31,7 +31,6 @@ end
 
 function M.registerSnippet(root_dir, filetypes, lsp_name, global_snippets)
   local output = {}
-  print(lsp_name)
   if lsp_name == "tsserver" or lsp_name == "volar" then
     local package_json = parserPackageJson(root_dir)
     for _, filetype in pairs(filetypes) do
