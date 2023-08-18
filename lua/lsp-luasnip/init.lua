@@ -53,7 +53,11 @@ function M.nodeJsShouldAddSnippet(decoratedSnip, package_json, lsp_filetype)
   local depName = decoratedSnip[2]
   local depOrDevDep = decoratedSnip[3]
   local acceptedValue = decoratedSnip[4]
-  local x = package_json[depOrDevDep][depName]
+  local depSection = package_json[depOrDevDep]
+  if depSection == nil then
+    return nil
+  end
+  local x = depSection[depName]
   if x and filetype == lsp_filetype then
     if acceptedValue == "present" then
       return decoratedSnip[5]
